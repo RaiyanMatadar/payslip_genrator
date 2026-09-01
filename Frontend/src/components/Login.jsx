@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import {
   Mail,
   Lock,
@@ -54,47 +55,34 @@ function Login() {
       return;
     }
 
-    // Password Length
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
-
     try {
       setLoading(true);
 
-      /*
-      ============================================
-              BACKEND API WILL COME HERE
-      ============================================
-
-      Example:
-
       const response = await axios.post(
-        "YOUR_LOGIN_API",
+        "http://localhost:3000/api/auth/login",
         {
           email: formData.email,
           password: formData.password,
+        },
+        {
+          withCredentials: true,
         }
       );
 
       toast.success(response.data.message);
 
-      */
-
-      // Temporary demo loading
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-
-      toast.success("Login successful!");
-
-      console.log("Login Data:", formData);
     } catch (error) {
-      console.error("Login Error:", error);
+
+      console.log("FULL ERROR:", error);
+      console.log("ERROR RESPONSE:", error.response);
+      console.log("ERROR MESSAGE:", error.message);
 
       toast.error(
-        error?.response?.data?.message ||
-          "Something went wrong. Please try again."
+        error.response?.data?.message ||
+        error.message ||
+        "An error occurred. Please try again."
       );
+
     } finally {
       setLoading(false);
     }
@@ -106,9 +94,7 @@ function Login() {
       {/* Main Container */}
       <div className="w-full max-w-5xl h-[560px] bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row">
 
-        {/* =====================================================
-            LEFT SIDE
-        ====================================================== */}
+        {/* LEFT SIDE */}
         <div className="relative hidden lg:flex lg:w-[46%] bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-8 overflow-hidden">
 
           {/* Background Circles */}
